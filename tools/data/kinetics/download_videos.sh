@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # set up environment
-conda env create -f environment.yml
+# conda env create -f environment.yml
 source activate kinetics
-pip install --upgrade youtube-dl
+# pip install --upgrade youtube-dl
 
 DATASET=$1
 if [ "$DATASET" == "kinetics400" ] || [ "$1" == "kinetics600" ] || [ "$1" == "kinetics700" ]; then

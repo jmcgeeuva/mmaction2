@@ -22,6 +22,7 @@ def extract_frame(vid_item):
         bool: Whether generate optical flow successfully.
     """
     full_path, vid_path, vid_id, method, task, report_file = vid_item
+    # full_path, vid_path, vid_id, method, task, report_file = full_path[0], vid_path[0], vid_id[0], method[0], task[0], report_file[0]
     if '/' in vid_path:
         act_name = osp.basename(osp.dirname(vid_path))
         out_full_path = osp.join(args.out_dir, act_name)
@@ -39,6 +40,11 @@ def extract_frame(vid_item):
                 out_full_path = osp.join(out_full_path, video_name)
 
                 vr = mmcv.VideoReader(full_path)
+                wtsu = True
+                if wtsu:
+                    vr = np.transpose(vr, axes=[1, 0, 2, 3])
+                elif htsu:
+                    vr = np.transpose(vr, axes=[2, 1, 0, 3])
                 for i, vr_frame in enumerate(vr):
                     if vr_frame is not None:
                         w, h, _ = np.shape(vr_frame)
@@ -266,13 +272,16 @@ if __name__ == '__main__':
     elif args.level == 1:
         vid_list = list(map(osp.basename, fullpath_list))
 
-    lock = Lock()
-    pool = Pool(args.num_worker, initializer=init, initargs=(lock, ))
-    pool.map(
-        extract_frame,
-        zip(fullpath_list, vid_list, range(len(vid_list)),
-            len(vid_list) * [args.flow_type],
-            len(vid_list) * [args.task],
-            len(vid_list) * [args.report_file]))
-    pool.close()
-    pool.join()
+    print(fullpath_list[0], vid_list[0])
+
+    # lock = Lock()
+    # pool = Pool(args.num_worker, initializer=init, initargs=(lock, ))
+    # pool.map(
+    #     extract_frame,
+    #     zip(fullpath_list, vid_list, range(len(vid_list)),
+    #             len(vid_list) * [args.flow_type],
+    #             len(vid_list) * [args.task],
+    #             len(vid_list) * [args.report_file])
+    # )
+    # pool.close()
+    # pool.join()

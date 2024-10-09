@@ -92,7 +92,7 @@ def download_clip(video_identifier,
                 '"%s"' % (url_base + video_identifier)
             ]
             command = ' '.join(command)
-            print(command)
+            # print(command)
             attempts = 0
             while True:
                 try:
@@ -192,7 +192,7 @@ def main(input_csv,
                 download_clip_wrapper(row, label_to_dir, trim_format, tmp_dir))
     else:
         status_list = Parallel(
-            n_jobs=num_jobs)(delayed(download_clip_wrapper)(
+            n_jobs=num_jobs, verbose=10)(delayed(download_clip_wrapper)(
                 row, label_to_dir, trim_format, tmp_dir)
                              for i, row in dataset.iterrows())
 
